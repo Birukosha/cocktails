@@ -14,34 +14,42 @@ namespace Cocktails.WCF
     {
 
         [OperationContract]
-        string GetData(int value);
-
+        List<CocktailDBO> GetCocktails();
         [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
+        CocktailInfoDBO GetCocktailByID(int id);
 
         // TODO: Add your service operations here
     }
-
-
-    // Use a data contract as illustrated in the sample below to add composite types to service operations.
     [DataContract]
-    public class CompositeType
+    public class CocktailDBO
     {
-        bool boolValue = true;
-        string stringValue = "Hello ";
-
         [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
-
+        public int ID;
         [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
+        public string Name;
+        [DataMember]
+        public string Description;
+        [DataMember]
+        public string Preparation;
+        [DataMember]
+        public string ImageURL;
+    }
+
+    [DataContract]
+    public class IngredientDBO
+    {
+        [DataMember]
+        public string Name;
+        [DataMember]
+        public string Number;
+    }
+
+    [DataContract]
+    public class CocktailInfoDBO
+    {
+        [DataMember]
+        public CocktailDBO Cocktail;
+        [DataMember]
+        public List<IngredientDBO> Ingredients;
     }
 }
