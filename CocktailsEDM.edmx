@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CocktailsDModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="CocktailsDModelStoreContainer">
+          <EntitySet Name="Cocktails" EntityType="CocktailsDModel.Store.Cocktails" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CocktailsIngredients" EntityType="CocktailsDModel.Store.CocktailsIngredients" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Ingredients" EntityType="CocktailsDModel.Store.Ingredients" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_CocktailsIngredients_Cocktails" Association="CocktailsDModel.Store.FK_CocktailsIngredients_Cocktails">
+            <End Role="Cocktails" EntitySet="Cocktails" />
+            <End Role="CocktailsIngredients" EntitySet="CocktailsIngredients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CocktailsIngredients_Ingredients" Association="CocktailsDModel.Store.FK_CocktailsIngredients_Ingredients">
+            <End Role="Ingredients" EntitySet="Ingredients" />
+            <End Role="CocktailsIngredients" EntitySet="CocktailsIngredients" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Cocktails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Preparation" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ImageURL" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CocktailsIngredients">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="IDctail" Type="int" Nullable="false" />
+          <Property Name="NameIngr" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Number" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Ingredients">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_CocktailsIngredients_Cocktails">
+          <End Role="Cocktails" Type="CocktailsDModel.Store.Cocktails" Multiplicity="1" />
+          <End Role="CocktailsIngredients" Type="CocktailsDModel.Store.CocktailsIngredients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cocktails">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CocktailsIngredients">
+              <PropertyRef Name="IDctail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CocktailsIngredients_Ingredients">
+          <End Role="Ingredients" Type="CocktailsDModel.Store.Ingredients" Multiplicity="1" />
+          <End Role="CocktailsIngredients" Type="CocktailsDModel.Store.CocktailsIngredients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredients">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="CocktailsIngredients">
+              <PropertyRef Name="NameIngr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CocktailsDModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="CocktailsDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cocktails" EntityType="CocktailsDModel.Cocktail" />
+          <EntitySet Name="CocktailsIngredients" EntityType="CocktailsDModel.CocktailsIngredient" />
+          <EntitySet Name="Ingredients" EntityType="CocktailsDModel.Ingredient" />
+          <AssociationSet Name="FK_CocktailsIngredients_Cocktails" Association="CocktailsDModel.FK_CocktailsIngredients_Cocktails">
+            <End Role="Cocktails" EntitySet="Cocktails" />
+            <End Role="CocktailsIngredients" EntitySet="CocktailsIngredients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CocktailsIngredients_Ingredients" Association="CocktailsDModel.FK_CocktailsIngredients_Ingredients">
+            <End Role="Ingredients" EntitySet="Ingredients" />
+            <End Role="CocktailsIngredients" EntitySet="CocktailsIngredients" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Cocktail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Preparation" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ImageURL" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="CocktailsIngredients" Relationship="CocktailsDModel.FK_CocktailsIngredients_Cocktails" FromRole="Cocktails" ToRole="CocktailsIngredients" />
+        </EntityType>
+        <EntityType Name="CocktailsIngredient">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDctail" Type="Int32" Nullable="false" />
+          <Property Name="NameIngr" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Number" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Cocktail" Relationship="CocktailsDModel.FK_CocktailsIngredients_Cocktails" FromRole="CocktailsIngredients" ToRole="Cocktails" />
+          <NavigationProperty Name="Ingredient" Relationship="CocktailsDModel.FK_CocktailsIngredients_Ingredients" FromRole="CocktailsIngredients" ToRole="Ingredients" />
+        </EntityType>
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="CocktailsIngredients" Relationship="CocktailsDModel.FK_CocktailsIngredients_Ingredients" FromRole="Ingredients" ToRole="CocktailsIngredients" />
+        </EntityType>
+        <Association Name="FK_CocktailsIngredients_Cocktails">
+          <End Role="Cocktails" Type="CocktailsDModel.Cocktail" Multiplicity="1" />
+          <End Role="CocktailsIngredients" Type="CocktailsDModel.CocktailsIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cocktails">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CocktailsIngredients">
+              <PropertyRef Name="IDctail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CocktailsIngredients_Ingredients">
+          <End Role="Ingredients" Type="CocktailsDModel.Ingredient" Multiplicity="1" />
+          <End Role="CocktailsIngredients" Type="CocktailsDModel.CocktailsIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredients">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="CocktailsIngredients">
+              <PropertyRef Name="NameIngr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CocktailsDModelStoreContainer" CdmEntityContainer="CocktailsDBEntities">
+          <EntitySetMapping Name="Cocktails">
+            <EntityTypeMapping TypeName="CocktailsDModel.Cocktail">
+              <MappingFragment StoreEntitySet="Cocktails">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Preparation" ColumnName="Preparation" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CocktailsIngredients">
+            <EntityTypeMapping TypeName="CocktailsDModel.CocktailsIngredient">
+              <MappingFragment StoreEntitySet="CocktailsIngredients">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDctail" ColumnName="IDctail" />
+                <ScalarProperty Name="NameIngr" ColumnName="NameIngr" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ingredients">
+            <EntityTypeMapping TypeName="CocktailsDModel.Ingredient">
+              <MappingFragment StoreEntitySet="Ingredients">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="CocktailsEDM" ZoomLevel="87">
+        <EntityTypeShape EntityType="CocktailsDModel.Cocktail" Width="1.5" PointX="0.75" PointY="0.875" Height="2.1725878906250005" IsExpanded="true" />
+        <EntityTypeShape EntityType="CocktailsDModel.CocktailsIngredient" Width="1.5" PointX="3" PointY="0.875" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="CocktailsDModel.Ingredient" Width="1.5" PointX="0.75" PointY="5.25" Height="1.5956835937499996" IsExpanded="true" />
+        <AssociationConnector Association="CocktailsDModel.FK_CocktailsIngredients_Cocktails" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="1.9612939453124998" />
+          <ConnectorPoint PointX="3" PointY="1.9612939453124998" />
+        </AssociationConnector>
+        <AssociationConnector Association="CocktailsDModel.FK_CocktailsIngredients_Ingredients" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="6.047841796875" />
+          <ConnectorPoint PointX="3.75" PointY="6.047841796875" />
+          <ConnectorPoint PointX="3.75" PointY="3.0475878906249996" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
