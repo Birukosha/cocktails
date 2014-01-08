@@ -1,0 +1,4 @@
+c:\users\kimran\documents\Projects\Cocktails\Cocktails.WCF\bin\Cocktails.WCF.dll
+c:\users\kimran\documents\Projects\Cocktails\Cocktails.WCF\bin\Cocktails.WCF.pdb
+c:\users\kimran\documents\Projects\Cocktails\Cocktails.WCF\obj\Debug\Cocktails.WCF.dll
+c:\users\kimran\documents\Projects\Cocktails\Cocktails.WCF\obj\Debug\Cocktails.WCF.pdb
