@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CocktailsDModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="CocktailsDModelStoreContainer">
+    <EntitySet Name="Cocktails" EntityType="CocktailsDModel.Store.Cocktails" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CocktailsIngredients" EntityType="CocktailsDModel.Store.CocktailsIngredients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Ingredients" EntityType="CocktailsDModel.Store.Ingredients" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_CocktailsIngredients_Cocktails" Association="CocktailsDModel.Store.FK_CocktailsIngredients_Cocktails">
+      <End Role="Cocktails" EntitySet="Cocktails" />
+      <End Role="CocktailsIngredients" EntitySet="CocktailsIngredients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CocktailsIngredients_Ingredients" Association="CocktailsDModel.Store.FK_CocktailsIngredients_Ingredients">
+      <End Role="Ingredients" EntitySet="Ingredients" />
+      <End Role="CocktailsIngredients" EntitySet="CocktailsIngredients" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Cocktails">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Preparation" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ImageURL" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CocktailsIngredients">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="IDctail" Type="int" Nullable="false" />
+    <Property Name="NameIngr" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="Number" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Ingredients">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+  </EntityType>
+  <Association Name="FK_CocktailsIngredients_Cocktails">
+    <End Role="Cocktails" Type="CocktailsDModel.Store.Cocktails" Multiplicity="1" />
+    <End Role="CocktailsIngredients" Type="CocktailsDModel.Store.CocktailsIngredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cocktails">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CocktailsIngredients">
+        <PropertyRef Name="IDctail" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CocktailsIngredients_Ingredients">
+    <End Role="Ingredients" Type="CocktailsDModel.Store.Ingredients" Multiplicity="1" />
+    <End Role="CocktailsIngredients" Type="CocktailsDModel.Store.CocktailsIngredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ingredients">
+        <PropertyRef Name="Name" />
+      </Principal>
+      <Dependent Role="CocktailsIngredients">
+        <PropertyRef Name="NameIngr" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

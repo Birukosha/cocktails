@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CocktailsDModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="CocktailsDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Cocktails" EntityType="CocktailsDModel.Cocktail" />
+    <EntitySet Name="CocktailsIngredients" EntityType="CocktailsDModel.CocktailsIngredient" />
+    <EntitySet Name="Ingredients" EntityType="CocktailsDModel.Ingredient" />
+    <AssociationSet Name="FK_CocktailsIngredients_Cocktails" Association="CocktailsDModel.FK_CocktailsIngredients_Cocktails">
+      <End Role="Cocktails" EntitySet="Cocktails" />
+      <End Role="CocktailsIngredients" EntitySet="CocktailsIngredients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CocktailsIngredients_Ingredients" Association="CocktailsDModel.FK_CocktailsIngredients_Ingredients">
+      <End Role="Ingredients" EntitySet="Ingredients" />
+      <End Role="CocktailsIngredients" EntitySet="CocktailsIngredients" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Cocktail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Preparation" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="ImageURL" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="CocktailsIngredients" Relationship="CocktailsDModel.FK_CocktailsIngredients_Cocktails" FromRole="Cocktails" ToRole="CocktailsIngredients" />
+  </EntityType>
+  <EntityType Name="CocktailsIngredient">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IDctail" Type="Int32" Nullable="false" />
+    <Property Name="NameIngr" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="Number" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Cocktail" Relationship="CocktailsDModel.FK_CocktailsIngredients_Cocktails" FromRole="CocktailsIngredients" ToRole="Cocktails" />
+    <NavigationProperty Name="Ingredient" Relationship="CocktailsDModel.FK_CocktailsIngredients_Ingredients" FromRole="CocktailsIngredients" ToRole="Ingredients" />
+  </EntityType>
+  <EntityType Name="Ingredient">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="CocktailsIngredients" Relationship="CocktailsDModel.FK_CocktailsIngredients_Ingredients" FromRole="Ingredients" ToRole="CocktailsIngredients" />
+  </EntityType>
+  <Association Name="FK_CocktailsIngredients_Cocktails">
+    <End Role="Cocktails" Type="CocktailsDModel.Cocktail" Multiplicity="1" />
+    <End Role="CocktailsIngredients" Type="CocktailsDModel.CocktailsIngredient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cocktails">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CocktailsIngredients">
+        <PropertyRef Name="IDctail" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CocktailsIngredients_Ingredients">
+    <End Role="Ingredients" Type="CocktailsDModel.Ingredient" Multiplicity="1" />
+    <End Role="CocktailsIngredients" Type="CocktailsDModel.CocktailsIngredient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ingredients">
+        <PropertyRef Name="Name" />
+      </Principal>
+      <Dependent Role="CocktailsIngredients">
+        <PropertyRef Name="NameIngr" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
