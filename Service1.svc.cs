@@ -16,7 +16,7 @@ namespace Cocktails.WCF
         public List<CocktailDBO> GetCocktails()
         {
             List<CocktailDBO> cocktails = new List<CocktailDBO>();
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"] ))
+            using (SqlConnection conn = new SqlConnection("Server=68839d59-9e84-473b-b6e4-a2ad010ee02a.sqlserver.sequelizer.com;Database=db68839d599e84473bb6e4a2ad010ee02a;User ID=plsycdccvwjdbjou;Password=nJzSnRkDm4xttrFk7uFZLbUpDzLVWZMJ7c8nExM2pnVkRTTFtjiQWPmmXjnUewQt;"))
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -35,6 +35,7 @@ namespace Cocktails.WCF
                                 Preparation = reader.GetString(3),
                                 ImageURL = reader.GetString(4)
                             };
+                            cocktails.Add(cocktail);
                         }
                         reader.Close();
                     }
@@ -49,7 +50,7 @@ namespace Cocktails.WCF
         {
             CocktailInfoDBO cocktailInfo = new CocktailInfoDBO();
 
-            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"]))
+            using (SqlConnection conn = new SqlConnection("Server=68839d59-9e84-473b-b6e4-a2ad010ee02a.sqlserver.sequelizer.com;Database=db68839d599e84473bb6e4a2ad010ee02a;User ID=plsycdccvwjdbjou;Password=nJzSnRkDm4xttrFk7uFZLbUpDzLVWZMJ7c8nExM2pnVkRTTFtjiQWPmmXjnUewQt;"))
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -59,6 +60,7 @@ namespace Cocktails.WCF
                     cmd.Parameters.AddWithValue("@IDc", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+                        cocktailInfo.Cocktail = new CocktailDBO();
                         while (reader.Read())
                         {
                             cocktailInfo.Cocktail.ID = reader.GetInt32(0);
@@ -74,7 +76,7 @@ namespace Cocktails.WCF
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = "select * from CocktailsIngredients where IDc = @IDc";
+                    cmd.CommandText = "select * from CocktailsIngredients where IDctail = @IDc";
                     cmd.Parameters.AddWithValue("@IDc", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
