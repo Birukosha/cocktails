@@ -132,7 +132,7 @@ namespace Cocktails.WCF
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = "select * from CocktailsIngredients where IDctail = @IDc order by name";
+                    cmd.CommandText = "select * from CocktailsIngredients where IDctail = @IDc order by NameIngr";
                     cmd.Parameters.AddWithValue("@IDc", id);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
