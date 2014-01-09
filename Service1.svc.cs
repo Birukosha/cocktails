@@ -270,7 +270,7 @@ namespace Cocktails.WCF
                 {
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.CommandText = "select ID from Cocktails where Name = @cocktail order by Name";
-                    cmd.Parameters.AddWithValue("@name", cocktail);
+                    cmd.Parameters.AddWithValue("@cocktail", cocktail);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
