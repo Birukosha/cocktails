@@ -20,8 +20,8 @@ namespace Cocktails.WCF
 
         [OperationContract]
         List<string> GetIngredients();
-        //[OperationContract]
-        //List<string> GetIngredientsByID(int id);
+        [OperationContract]
+        List<string> GetIngredientsByID(int id);
 
         // TODO: Add your service operations here
     }

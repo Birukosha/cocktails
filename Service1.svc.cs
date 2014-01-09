@@ -123,5 +123,31 @@ namespace Cocktails.WCF
             }
             return ingredients;
         }
+        public List<string> GetIngredientsByID(int id)
+        {
+            List<string> ingredients = new List<string>();
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"]))
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "select * from CocktailsIngredients where IDctail = @IDc order by name";
+                    cmd.Parameters.AddWithValue("@IDc", id);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string ingredient = reader.GetString(2);
+                            ingredients.Add(ingredient);
+                        }
+                        reader.Close();
+                    }
+                }
+                conn.Close();
+            }
+            return ingredients;
+
+        }
     }
 }
