@@ -23,6 +23,8 @@ namespace Cocktails.WCF
         [OperationContract]
         List<string> GetIngredientsByID(int id);
 
+        [OperationContract]
+        bool AddIngredient(string user, string password, string ingredient);
         // TODO: Add your service operations here
     }
     [DataContract]

@@ -149,5 +149,44 @@ namespace Cocktails.WCF
             return ingredients;
 
         }
+
+        public bool AddIngredient(string user, string password, string ingredient)
+        {
+            if (user != "birukosha" || password != "a3b7f6d5s4")
+                return false;
+
+            List<string> ingredients = new List<string>();
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"]))
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "select * from Ingredients where Name = @ingredient order by Name";
+                    cmd.Parameters.AddWithValue("@ingredient", ingredient);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string ingredientFromDB = reader.GetString(1);
+                            ingredients.Add(ingredientFromDB);
+                        }
+                        reader.Close();
+                    }
+                    if (ingredients.Count() != 0)
+                        return false;
+                }
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "Insert Into Ingredients values (@ingredient)";
+                    cmd.Parameters.AddWithValue("@ingredient", ingredient);
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+            return true;
+        }
     }
 }
