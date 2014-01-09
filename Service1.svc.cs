@@ -253,5 +253,66 @@ namespace Cocktails.WCF
             }
             return true;
         }
+        public bool AddIngredientToCocktail(string user, string password, string cocktail, string ingredient, string number)
+        {
+            if (user != "birukosha" ||
+                password != "a3b7f6d5s4" ||
+                string.IsNullOrEmpty(cocktail) ||
+                string.IsNullOrEmpty(ingredient) ||
+                string.IsNullOrEmpty(number))
+                return false;
+            int IDctail = 0;
+            List<string> cocktails = new List<string>();
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"]))
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "select ID from Cocktails where Name = @cocktail order by Name";
+                    cmd.Parameters.AddWithValue("@name", cocktail);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            IDctail = reader.GetInt32(0);
+                        }
+                        reader.Close();
+                    }
+                    if (IDctail == 0)
+                        return false;
+                }
+                string ingredientInDB = null;
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "select NameIngr from CocktailsIngredients where IDctail = @idctail and NameIngr = @ingredient";
+                    cmd.Parameters.AddWithValue("@idctail", IDctail);
+                    cmd.Parameters.AddWithValue("@ingredient", ingredient);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ingredientInDB = reader.GetString(0);
+                        }
+                        reader.Close();
+                    }
+                    if (!string.IsNullOrEmpty(ingredientInDB))
+                        return false;
+                }
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "Insert Into CocktailsIngredients values (@idctail, @nameingr, @number)";
+                    cmd.Parameters.AddWithValue("@idctail", IDctail);
+                    cmd.Parameters.AddWithValue("@nameingr", ingredient);
+                    cmd.Parameters.AddWithValue("@number", number);
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+            return true;
+        }
     }
 }

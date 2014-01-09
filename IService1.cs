@@ -27,6 +27,8 @@ namespace Cocktails.WCF
         bool AddIngredient(string user, string password, string ingredient);
         [OperationContract]
         bool AddCocktail(string user, string password, string name, string description, string preparation, string imageUrl);
+        [OperationContract]
+        bool AddIngredientToCocktail(string user, string password, string cocktail, string ingredient, string number);
         // TODO: Add your service operations here
     }
     [DataContract]
