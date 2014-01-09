@@ -152,7 +152,7 @@ namespace Cocktails.WCF
 
         public bool AddIngredient(string user, string password, string ingredient)
         {
-            if (user != "birukosha" || password != "a3b7f6d5s4")
+            if (user != "birukosha" || password != "a3b7f6d5s4" || string.IsNullOrWhiteSpace(ingredient) || string.IsNullOrEmpty(ingredient))
                 return false;
 
             List<string> ingredients = new List<string>();
@@ -182,6 +182,71 @@ namespace Cocktails.WCF
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.CommandText = "Insert Into Ingredients values (@ingredient)";
                     cmd.Parameters.AddWithValue("@ingredient", ingredient);
+                    cmd.ExecuteNonQuery();
+                }
+                conn.Close();
+            }
+            return true;
+        }
+
+        public bool AddCocktail(string user, string password, string name, string description, string preparation, string imageUrl)
+        {
+            if (user != "birukosha" || 
+                password != "a3b7f6d5s4" || 
+                string.IsNullOrEmpty(name) || 
+                string.IsNullOrEmpty(description) || 
+                string.IsNullOrEmpty(preparation) || 
+                string.IsNullOrEmpty(imageUrl))
+                return false;
+
+            List<string> cocktails = new List<string>();
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"]))
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "select * from Cocktails where Name = @name order by Name";
+                    cmd.Parameters.AddWithValue("@name", name);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string cocktailFromDB = reader.GetString(1);
+                            cocktails.Add(cocktailFromDB);
+                        }
+                        reader.Close();
+                    }
+                    if (cocktails.Count() != 0)
+                        return false;
+                }
+
+                int maxID = 0;
+                int nowID = 0;
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "select max(ID) as maximum from Cocktails";
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            maxID = reader.GetInt32(0);
+                        }
+                        reader.Close();
+                    }
+                    nowID = maxID + 1;
+                }
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "Insert Into Ingredients values (@id, @name, @description, @preaparatuin, @imageUrl)";
+                    cmd.Parameters.AddWithValue("@id", nowID);
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@description", description);
+                    cmd.Parameters.AddWithValue("@preparation", preparation);
+                    cmd.Parameters.AddWithValue("@imageUrl", imageUrl);
                     cmd.ExecuteNonQuery();
                 }
                 conn.Close();
