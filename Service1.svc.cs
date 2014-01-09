@@ -241,7 +241,7 @@ namespace Cocktails.WCF
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = "Insert Into Ingredients values (@id, @name, @description, @preparation, @imageUrl)";
+                    cmd.CommandText = "Insert Into Cocktails values (@id, @name, @description, @preparation, @imageUrl)";
                     cmd.Parameters.AddWithValue("@id", nowID);
                     cmd.Parameters.AddWithValue("@name", name);
                     cmd.Parameters.AddWithValue("@description", description);
