@@ -18,6 +18,11 @@ namespace Cocktails.WCF
         [OperationContract]
         CocktailInfoDBO GetCocktailByID(int id);
 
+        [OperationContract]
+        List<string> GetIngredients();
+        //[OperationContract]
+        //List<string> GetIngredientsByID(int id);
+
         // TODO: Add your service operations here
     }
     [DataContract]

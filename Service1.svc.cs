@@ -16,7 +16,7 @@ namespace Cocktails.WCF
         public List<CocktailDBO> GetCocktails()
         {
             List<CocktailDBO> cocktails = new List<CocktailDBO>();
-            using (SqlConnection conn = new SqlConnection("Server=68839d59-9e84-473b-b6e4-a2ad010ee02a.sqlserver.sequelizer.com;Database=db68839d599e84473bb6e4a2ad010ee02a;User ID=plsycdccvwjdbjou;Password=nJzSnRkDm4xttrFk7uFZLbUpDzLVWZMJ7c8nExM2pnVkRTTFtjiQWPmmXjnUewQt;"))
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"]))
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -50,7 +50,7 @@ namespace Cocktails.WCF
         {
             CocktailInfoDBO cocktailInfo = new CocktailInfoDBO();
 
-            using (SqlConnection conn = new SqlConnection("Server=68839d59-9e84-473b-b6e4-a2ad010ee02a.sqlserver.sequelizer.com;Database=db68839d599e84473bb6e4a2ad010ee02a;User ID=plsycdccvwjdbjou;Password=nJzSnRkDm4xttrFk7uFZLbUpDzLVWZMJ7c8nExM2pnVkRTTFtjiQWPmmXjnUewQt;"))
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"]))
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -98,6 +98,30 @@ namespace Cocktails.WCF
             }
             return cocktailInfo;
 
+        }
+        public List<string> GetIngredients()
+        {
+            List<string> ingredients = new List<string>();
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.AppSettings["SQLSERVER_CONNECTION_STRING"]))
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = "select * from Ingredients order by Name";
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string ingredient = reader.GetString(1);
+                            ingredients.Add(ingredient);
+                        }
+                        reader.Close();
+                    }
+                }
+                conn.Close();
+            }
+            return ingredients;
         }
     }
 }
